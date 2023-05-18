@@ -27,7 +27,7 @@ async function run() {
     const toysCollections = client.db("toyLandDB").collection("toys");
     //all toys
     app.get("/toys", async (req, res) => {
-      const cursor = toysCollections.find();
+      const cursor = toysCollections.find().limit(20);
       const result = await cursor.toArray();
       res.send(result);
     });
