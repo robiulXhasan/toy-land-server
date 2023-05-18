@@ -23,12 +23,29 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const toysCollections = client.db("toyLandDB").collection("toys");
+    // app.get("/toys", async (req, res) => {
+    //   const cursor = toysCollections.find();
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // });
+    app.get("/toys/category", async (req, res) => {
+      console.log(req.query);
+      if (req.query?.subcategory) {
+        query = {
+          sub_category: req.query.subcategory,
+        };
+      }
+      const result = await toysCollections.find(query).toArray();
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    //await client.close();
   }
 }
 run().catch(console.dir);
@@ -37,4 +54,4 @@ app.get("/", (req, res) => {
   res.send("ToyLand server Running");
 });
 
-app.listen(port, () => console.log(`ToyLang Running on port : ${port}`));
+app.listen(port, () => console.log(`ToyLand Running on port : ${port}`));
