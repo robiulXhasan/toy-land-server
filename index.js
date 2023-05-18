@@ -25,11 +25,11 @@ async function run() {
     await client.connect();
 
     const toysCollections = client.db("toyLandDB").collection("toys");
-    // app.get("/toys", async (req, res) => {
-    //   const cursor = toysCollections.find();
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // });
+    app.get("/toys", async (req, res) => {
+      const cursor = toysCollections.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     app.get("/toys/category", async (req, res) => {
       console.log(req.query);
       if (req.query?.subcategory) {
