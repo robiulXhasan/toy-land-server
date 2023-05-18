@@ -55,7 +55,7 @@ async function run() {
       let query = {};
       if (req.query?.name) {
         query = {
-          toy_name: req.query.name,
+          toy_name: { $regex: `^${req.query.name}$`, $options: "i" },
         };
       }
       const result = await toysCollections.find(query).toArray();
