@@ -31,14 +31,29 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    
+    //post toy data
     app.post("/toys", async (req, res) => {
       const toy = req.body;
-      
+
       const result = await toysCollections.insertOne(toy);
       res.send(result);
     });
 
+    //update
+    app.patch("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const toy = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          price: toy.price,
+          quantity: toy.quantity,
+          description: toy.description,
+        },
+      };
+      const result = await toysCollections.updateOne(filter, updateDoc);
+      res.send(result);
+    });
 
     //toys by category
     app.get("/toys/category", async (req, res) => {
