@@ -61,6 +61,22 @@ async function run() {
       const result = await toysCollections.find(query).toArray();
       res.send(result);
     });
+    app.get("/mytoys", async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = {
+          seller_email: req.query?.email,
+        };
+      }
+      const option = parseInt(req.query.sort);
+      if (option == 0) {
+        const result = await toysCollections.find(query).toArray();
+        res.send(result);
+      } else {
+        const result = await toysCollections.find(query).sort({ price: option }).toArray();
+        res.send(result);
+      }
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
