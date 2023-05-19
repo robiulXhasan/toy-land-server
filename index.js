@@ -38,6 +38,13 @@ async function run() {
       const result = await toysCollections.insertOne(toy);
       res.send(result);
     });
+    // delete
+    app.delete("/toys/:id", async (req, res) => {
+      const id = req.params.id;
+      const cursor = { _id: new ObjectId(id) };
+      const result = await toysCollections.deleteOne(cursor);
+      res.send(result);
+    });
 
     //update
     app.patch("/update/:id", async (req, res) => {
