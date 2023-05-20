@@ -22,12 +22,19 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    client.connect();
 
     const toysCollections = client.db("toyLandDB").collection("toys");
+    const reviewCollection = client.db("toyLandDB").collection("reviews");
     //all toys
     app.get("/toys", async (req, res) => {
       const cursor = toysCollections.find().limit(20);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    //all reviews
+    app.get("/reviews", async (req, res) => {
+      const cursor = reviewCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -64,10 +71,9 @@ async function run() {
 
     //toys by category
     app.get("/toys/category", async (req, res) => {
-      console.log(req.query);
       if (req.query?.subcategory) {
         query = {
-          sub_category: req.query.subcategory,
+          sub_category: { $regex: `^${req.query.subcategory}$`, $options: "i" },
         };
       }
       const result = await toysCollections.find(query).toArray();
