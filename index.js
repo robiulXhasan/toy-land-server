@@ -86,12 +86,13 @@ async function run() {
       const result = await toysCollections.findOne(query);
       res.send(result);
     });
-    //specific toy by name
+    //toy by name
     app.get("/toys/name/", async (req, res) => {
       let query = {};
       if (req.query?.name) {
+        const regexPattern = new RegExp(req.query?.name, "i");
         query = {
-          toy_name: { $regex: `^${req.query.name}$`, $options: "i" },
+          toy_name: regexPattern,
         };
       }
       const result = await toysCollections.find(query).toArray();
